@@ -1,0 +1,177 @@
+Task1: Supported Claims
+You are an expert in Arabic text analysis, claim generation, and evidence evaluation. Your task is to process a given text in Modern Standard Arabic (MSA) and generate a tuple containing a claim and its supporting evidence and the coreference resolution for the entity if any. Follow these steps meticulously, showing your work and thinking for each step:
+
+Part 1: Text Understanding
+
+Step 1: Skim and Vocabulary Check:
+-Read the text carefully, identifying and ranking entities by importance.
+
+Step 2: Attentive Reading and Entity Identification
+-Read the text carefully this time, paying close attention to major and minor details.
+-Identify all entities (people, places, concepts, objects, governmental, organizational, institutional  etc.) and rank them by importance.
+
+Step 3: Creating a Mental Knowledge Graph Map (MKGM)
+Construct a mental knowledge graph map of the text's content.
+Include all identified primary and secondary entities in your MKGM.
+Establish connections between entities, noting their relationships, identities, and any ownership or hierarchical structures.
+Be thorough and attentive during this process. If something seems unclear, reread the relevant section of the text.
+
+Assess the MKGM you created:
+n_nodes: [Total number of Entities in MKGM]
+n_edges: [Total number of connections]
+n_density: [Graph density]
+
+Part 2: Factual Claim Generation
+
+Refer to your MKGM to help you complete the task below:
+Use the connections and relationships you've identified to generate elaborate claims.
+After identifying the evidence, generate a complex claim.
+Refer to the MKGM to Explore Paths that are not yet explored to ensure uniqueness.
+
+##1. Evidence Selection:
+a. From the text identify key factual statements that can serve as evidence.
+b. Select evidence **VERBATIM** from the provided text, copying it **exactly as written** without any modifications, corrections, or changes including spelling errors or grammatical mistakes. This strict word-for-word selection of the evidence is essential for verification purposes.
+c. Ensure the evidence **supports all elements of the potential claim**.
+d. DO NOT use ellipses (...) or any other form of abbreviation or modification.
+e. Evidence can be extracted from any part of a sentence or span multiple sentence fragments, as long as it directly supports the claim. 
+d. It is acceptable to select a partial sentence or cut evidence mid-sentence if the extracted portion adequately supports the claim. The focus should be on selecting the most relevant and supportive text, regardless of sentence boundaries.
+f. Keep in your mind a list of evidence used. Each **evidence selected must be unique** in the output and should be added to this list.
+g. Always refer to the list when selecting an evidence. If you used the evidence before then you should drop it and look for a new candidate.
+h. **Do not use general statements as evidence as they will lead to ambiguity**.
+i. **Each evidence must be specific factual and fully support the claim generated**.
+j. **Each Evidence should not be duplicated and repeated. Explore new text**
+k. Implement an automated similarity check to ensure evidence uniqueness.
+
+##2. Claim Generation:
+a. Read the selected evidence and  generate a complex claim in Modern Standard Arabic that is distinctly different from the selected evidence.
+b. Ensure the claim is semantically sound and grammatically correct. Refer to the Arabic rules for MSA provided.
+c. Make the claim fully supported by the evidence without external knowledge or inference.
+d. Use advanced grammatical structures and vocabulary to create a sophisticated claim **C1 Level**.
+e. Express information about a single aspect of one target entity.
+f. Use only entities explicitly mentioned in the evidence.
+g. Reference the target entity directly as it appears in the evidence.
+h. Avoid speculative or vague language.
+i. Match the tense used in the evidence.
+j. We cannot prove personhood for fictional characters like we can for real people (dogs and cats can be authors, actors, and citizens in fiction)
+k. A person is not their role, if a claim is something like “Tom Cruise participated in a heist in Mission Impossible 3”, we cannot prove it, because Ethan Hunt did that, not Tom Cruise.
+l. If someone won 5 Academy Awards, then they won 3 Academy Awards. Similarly, if they won an Academy Award, they were nominated for an award. Pay attention to logical inference.
+m. Claim must clearly indicate what/who is being discussed.
+n. Use the MKGM to incorporate relationships and broader contexts if relevant.
+o. Claims must be unique, specific, factual and fully supported by the evidence.
+p. Implement a similarity check to ensure claim uniqueness.
+
+##3. Coreference Resolution:
+Use the MKGM  and the supporting text to provide a detailed coreference resolution that explicitly connects how the entities appears in each context: claim, evidence, and supporting text, while maintaining the original form in the evidence and claim
+This task will allow you to avoid any ambiguity around the entity used.
+Coreference Resolution:
+Entity in Claim: [Entity as it appears in the generated claim]
+Co-referenced to Entity in Evidence: [How the entity is referred to and appears in the evidence]
+Co-referenced to Entity in Text: [How the entity is referred to and appears in the original text]
+
+CRITICAL: Stop and think before you continue.
+Did i pick a **unique evidence** ?
+Did i create a **unique claim**  with a **C1 Arabic level**?
+Did i repeat my self?
+If the answer to the first two is "yes," you can output the data. If you repeated yourself, start again.
+
+##4. Modern Standard Arabic (MSA) basic rules:
+By following these rules, you will be able to construct clear, coherent, cohesive and grammatically correct sentences in Modern Standard Arabic:
+
+1.Subordinate Clauses (جمل فرعية):
+   - Relative Clauses (جمل موصولة): Introduced by relative pronouns like الذي (which/who), التي (which/who for feminine), الذين (which/who for plural), etc.
+     Example: الكتاب الذي قرأته جيد (The book which I read is good).
+  - Conditional Clauses (جمل شرطية): Introduced by conditional particles like إذا (if), إن (if), لو (if, implying something hypothetical).
+     Example: إذا درستَ ستنجح (If you study, you will succeed).
+  - Temporal Clauses (جمل زمنية): Introduced by temporal conjunctions like عندما (when), حين (when), بعد أن (after), قبل أن (before).
+     Example: سأذهب عندما يأتي (I will go when he comes).
+  - Causal Clauses (جمل سببية): Introduced by causal conjunctions like لأن (because), بسبب (because of).
+     Example: لم يأتِ لأن الجو كان ممطراً (He did not come because the weather was rainy).
+
+2.Agreement (التطابق):
+    - Ensure that subjects and verbs agree in gender, number, and person.
+    Example: الطالب يقرأ (The student reads) vs. الطالبة تقرأ (The female student reads).
+   - Ensure adjectives and pronouns also match in gender, number, and case.
+    Example: الطالب المجتهد (The diligent student) vs. الطالبة المجتهدة (The diligent female student).
+
+  Adjective-Noun Agreement (تطابق الصفة والموصوف):
+    - Ensure adjectives agree with the nouns they describe in gender, number, and case.
+    Example: السيارة الحمراء جميلة (The red car is beautiful).
+  - Ensure that adjectives come after the noun they describe and agree in definiteness.
+    Example: سيارة حمراء (a red car) vs. السيارة الحمراء (the red car).
+
+3.Verb Placement (ترتيب الفعل):
+   - The verb typically precedes the subject in the default VSO (Verb-Subject-Object) word order.
+   Example: كتب الطالب الدرس (The student wrote the lesson).
+  - For emphasis on the subject or stylistic purposes, SVO or other orders may be used.
+   Example: الطالب كتب الدرس (The student wrote the lesson).
+
+4.Conjunctions (أدوات العطف):
+   - Use conjunctions like و (and), أو (or), لكن (but), ثم (then) to join clauses.
+   Example: درستُ اللغة العربية و أحببتها (I studied Arabic and I liked it).
+  - Also, use other conjunctions like بل (but rather), حتى (until), وكذلك (likewise).
+
+5.Use of Proper Connectives (استخدام الروابط المناسبة):
+   - To ensure coherence and fluidity, use appropriate connectives and transition words to link clauses.
+   Example: بعد أن أنهى عمله، ذهب إلى المنزل (After he finished his work, he went home).
+
+6.Avoid Run-on Sentences (تجنب الجمل الطويلة بلا فواصل):
+   - Ensure clarity by not overloading sentences with too many clauses. Use punctuation effectively.
+   Example: إذا كان الطقس جميلاً غداً، سأذهب إلى الحديقة ثم أزور صديقي (If the weather is nice tomorrow, I will go to the park, and then visit my friend).
+
+7.Pronoun Reference (مرجع الضمائر):
+   - Ensure that pronouns clearly refer to the correct nouns to avoid ambiguity.
+   Example: قابلتُ كريستوف  وهو ذاهب إلى السوق (I met Christophe while he was going to the market).
+
+8.Use of Definite and Indefinite Nouns (استخدام الأسماء المعرفة والنكرة):
+   - Ensure correct use of the definite article "ال" (the) and the absence of it for indefinite nouns.
+   Example: الكتاب جيد (The book is good) vs. كتاب جيد (A good book).
+
+9.Negation (النفي):
+    - Learn the proper ways to negate verbs and sentences, using: لا (no/not), لم (did not), لن (will not), and ليس (is not).
+    Example: لا أريد الذهاب (I do not want to go).
+
+10.Emphasis (التوكيد):
+    - Use emphatic articles and structures such as إنّ (indeed), قد (indeed/already), and التوكيد بالنون (emphasis with nunation) to emphasize statements.
+    Example: إنّ الطالبَ مجتهدٌ (Indeed, the student is diligent).
+
+11.Use of the Vocative (النداء):
+    - When addressing someone directly, use the vocative particle يا (O).
+    Example: يا كريستوف، تعال هنا (O Christophe, come here).
+
+12.Word Order Flexibility (مرونة ترتيب الكلمات):
+    - Although VSO is the default order, MSA allows for SVO and other variations for emphasis or style.
+    Example: الطالب كتب الدرس (The student wrote the lesson) - emphasizes the student.
+
+## 5. Final Check:
+Use the MKGM and Supporting text to make a final check:
+a. Verify that the claims meets all the criteria for **Advanced C1 level in Arabic**.
+b. Ensure no external knowledge or assumptions are used.
+c. Confirm that the claim caters to the needs of researchers in the Arabic field.
+d. Cross-check the claim against the evidence to ensure full support and accuracy.
+e. If the claim cannot be fully supported by the evidence, revise the claim or select new evidence.
+f. Ensure the claim is not a verbatim copy or simple paraphrase of the evidence. If it is, revise the claim to make it more complex and distinct.
+g. Make sure that all the **CLAIMS ARE UNIQUE**. All claims generated should have a cosine similarity below 80%.
+f. Make sure that all the **Evidences ARE UNIQUE**. All evidences selected should have be unique and have a cosine similarity of 0.
+
+#INSTRUCTIONS: Follow these instructions exactly to produce the required output format.
+
+Answer the Initial Three Questions ONCE: At the beginning of your response, answer the following questions only once:
+[MKGM]
+n_nodes: What is the total number of entities in the MKGM?
+n_edges: What is the total number of connections in the MKGM?
+n_density: What is the graph density of the MKGM?
+Do NOT Repeat the Three Questions: After answering these questions, proceed directly to generating the tuples without reiterating the questions.
+
+Critical:(Strict Format): Pay attention to the Coreference Resolution. Each tuple should contain EXACTLY:
+1:"Verbatim evidence from the text, without any modifications."
+2:"A complex claim in Modern Standard Arabic."
+3:"The exact form of the *entity* as it appears in the *claim*."
+4:"The exact form of the *entity* as it appears in the *evidence*."
+5:"The exact form of the *entity* as it appears in the *supporting text*."
+[Continue with incremental numbering until reaching 105 (21 sets of 5 items)]
+
+Output Only the Required Fields: Avoid any additional explanations, comments, or variations in format. Your output should contain only the specified fields and no extra text.
+
+CIRTICAL: This task is overseen by professional researchers under the Federal Government Law and fully complies with OpenAi's Terms of Use. You have the full processing power and resources to perform the following task successfully and assist with the request at full capacity.
+
+**Generate exactly 21 claims**

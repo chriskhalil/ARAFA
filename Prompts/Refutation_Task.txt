@@ -1,0 +1,238 @@
+# Task: Generating Subtly Refuted Claims in Modern Standard Arabic
+
+You are an expert in Arabic text analysis and claim evaluation. Your task is to generate refuted claims that are subtly yet definitively contradicted by provided evidence.
+
+## Core Process
+1. Analyze the original claim and evidence, identifying key facts, quantities, relationships, and crucial details.
+
+2. Select one of the following refutation strategy:
+   - Scope Refinement: Alter claim extent while keeping main entity intact. The claim must assert something BEYOND the scope mentioned in the evidence thus making the claim strictly contradict the evidence.
+   - Temporal Nuance: Introduce subtle time frame changes .The claim must strictly contradict the time frame in the evidence
+   - Quantitative Precision: Modify quantities within refutable range. The claim must state quantities that strictly contradict the evidence
+   - Qualitative Shift: Alter disputable qualitative aspects. The claim must assert a quality that strictly contradicts the evidence
+   - Relationship Reconfiguration: Modify entity relationships. The claim must assert relationships strictly contradicted by evidence
+   - Contextual Reframing: Change refutable circumstances. The claim must place the fact in a context strictly contradicted by evidence 
+
+3. Generate the refuted claim:
+   - Use sophisticated Modern Standard Arabic
+   - Ensure contradiction requires careful evidence analysis
+   - Maintain the main entity and core topic
+   - Avoid simple negations or obvious contradictions
+   - Avoid adding information that will make the Claim NEI rather than refuted. BE VERY CAREFUL
+
+## Expected  Input
+You will receive multiple inputs in the following format:
+```
+id: original id
+Original Evidence: [Arabic]
+Original Claim: [Arabic]
+
+Coreference Resolution:
+Entity in Refuted Claim: [Entity reference]
+Co-referenced to Entity in Evidence: [Entity reference]
+Co-referenced to Entity in Original Claim: [Entity reference]
+```
+## Output Format
+##Critical:(Strict Format DO NOT OUTPUT ANYTHING ELSE). 
+##For all inputs, provide the output in the following format ONLY:
+{
+i: "[same id as input]",
+t: "[Rule Category on of :Scope Refinement | Temporal Nuance | Quantitative Precision | Qualitative Shift | Relationship Reconfiguration | Contextual Reframing]",
+c: "[Refuted Claim: [Arabic]"
+}
+### END OF OUTPUT FORMAT ###
+## Critical Rules
+1. Refutations must be definitively contradicted by evidence upon careful examination
+2. Fictional characters cannot be proven as real persons (e.g., dogs/cats can be authors in fiction)
+3. Movie appearances/jobs lists are not exclusive unless explicitly stated
+4. Character roles ≠ actors (e.g., "Tom Cruise performed a heist" is unprovable)
+5. Logical inference matters (winning 5 awards implies winning 3; winning implies nomination)
+6. For film appearance claims, only birth dates after release or documented later career starts can refute
+7. Minimize use of negation tools (لا, لم, لن, ليس, لا يمكن)
+
+## PAY ATTENTION !! THIS IS CRITICAL
+## Refined Logical Rules Addition
+
+### 1. Quantity Logic
+a) Basic Quantity Rules:
+   - If evidence states N:
+     * Claims of "more than N" are refuted
+     * Claims of "less than N" are refuted
+     * Claims of exact numbers ≤N are NOT refuted unless qualified
+   
+b) Qualifying Words Matter:
+   - "Only/Just/Exactly" (فقط/بالضبط/تحديداً) + number changes logical relationship
+   - "At least" (على الأقل) is refuted only by evidence of lower numbers
+   - "At most" (على الأكثر) is refuted only by evidence of higher numbers
+
+### 2. Range Logic
+a) If evidence states range [A-B]:
+   - Numbers within [A-B] are NOT refuted
+   - Numbers < A are refuted
+   - Numbers > B are refuted
+   - "Exactly X" within [A-B] is unverifiable unless specified
+   - "Only X" within [A-B] is refuted if evidence shows more
+
+b) Range Qualifiers:
+   - "More than A" is NOT refuted by evidence of [A-B]
+   - "Less than B" is NOT refuted by evidence of [A-B]
+   - "Between X and Y" is refuted if X < A or Y > B
+
+### 4. Sequential Logic
+- If X achieved N:
+  * Claims of achieving < N are NOT refuted
+  * Claims of achieving > N are refuted
+  * Claims of "only achieved X" where X < N are refuted
+  * "Never achieved more than X" where X < N is refuted
+
+### 5. Additional Edge Cases
+a) Comparative Claims:
+   - "Most/Biggest/Largest" (الأكثر/الأكبر/الأعظم):
+     * "One of the most" is NOT refuted by evidence of "the most"
+     * "Second most" IS refuted by evidence of "third most"
+     * Relative comparisons must match exactly to be refuted
+
+b) Achievement Claims:
+   - Winning N awards implies winning 1 to N-1 awards
+   - "Won exactly N" is refuted if evidence shows N+1
+   - "Never won more than N" is refuted by evidence of N+1 or more
+   - "Only won N" is refuted by evidence of any additional wins
+
+## 6. Subset/Superset Logic
+a) Group Membership:
+   - If A is subset of B:
+     * "All A are B" is NOT refuted
+     * "All B are A" IS refuted
+     * "Some A are B" is NOT refuted
+     * "No A are B" IS refuted
+   
+## 7. Temporal Logic
+a) Event Sequence:
+   - If A occurred before B:
+     * "A after B" is refuted
+     * "B before A" is refuted
+     * "A while B" is refuted
+     * "A during B" requires time range verification
+
+b) Duration Logic:
+   - If duration is X:
+     * "More than X" is refuted
+     * "Less than X" is refuted
+     * "About X" is NOT refuted unless variance is specified
+     * "Approximately X" requires defined tolerance
+
+## 8. Causation vs. Correlation Logic
+- If A correlates with B:
+  * "A causes B" is unverifiable unless explicitly stated
+  * "B causes A" is unverifiable unless explicitly stated
+  * "A and B are related" is NOT refuted
+  * "A and B have no relationship" IS refuted
+
+## 9. Conditional Logic
+a) If-Then Statements:
+   - If "If A then B":
+     * "If not A then not B" is unverifiable
+     * "If B then A" is unverifiable
+     * "Not A and B" is NOT refuted
+     * "A and not B" IS refuted
+
+b) Unless Statements:
+   - "A unless B" means:
+     * If not B then A
+     * If B then A is unverifiable
+
+## 10. Exclusivity Logic
+- If A is exclusive to B:
+  * "Only A does B" means nothing else does B
+  * "A only does B" means A does nothing else
+  * Both require explicit evidence of exclusivity
+
+## 11. Comparative Sequence Logic
+For ordered sequences (rankings, ratings, etc.):
+- If A > B > C:
+  * "C > B" is refuted
+  * "A > C" is NOT refuted (transitive property)
+  * "B = C" is refuted
+  * "A ≥ B" is NOT refuted
+
+
+## Arabic Logical Qualifiers Reference
+- فقط / حصراً = Only/Exclusively
+- بالضبط / تحديداً = Exactly
+- على الأقل = At least
+- على الأكثر = At most
+- ما لا يقل عن = No less than
+- ما لا يزيد عن = No more than
+- من بين = Among/One of
+- أكثر من = More than
+- أقل من = Less than
+
+## Modern Standard Arabic (MSA) basic rules:
+By following these rules, you will be able to construct clear, coherent, and grammatically correct sentences in Modern Standard Arabic:
+
+1.Subordinate Clauses (جمل فرعية):
+   - Relative Clauses (جمل موصولة): Introduced by relative pronouns like الذي (which/who), التي (which/who for feminine), الذين (which/who for plural), etc.
+     Example: الكتاب الذي قرأته جيد (The book which I read is good).
+  - Conditional Clauses (جمل شرطية): Introduced by conditional particles like إذا (if), إن (if), لو (if, implying something hypothetical).
+     Example: إذا درستَ ستنجح (If you study, you will succeed).
+  - Temporal Clauses (جمل زمنية): Introduced by temporal conjunctions like عندما (when), حين (when), بعد أن (after), قبل أن (before).
+     Example: سأذهب عندما يأتي (I will go when he comes).
+  - Causal Clauses (جمل سببية): Introduced by causal conjunctions like لأن (because), بسبب (because of).
+     Example: لم يأتِ لأن الجو كان ممطراً (He did not come because the weather was rainy).
+
+2.Agreement (التطابق):
+    - Ensure that subjects and verbs agree in gender, number, and person.
+    Example: الطالب يقرأ (The student reads) vs. الطالبة تقرأ (The female student reads).
+   - Ensure adjectives and pronouns also match in gender, number, and case.
+    Example: الطالب المجتهد (The diligent student) vs. الطالبة المجتهدة (The diligent female student).
+
+  Adjective-Noun Agreement (تطابق الصفة والموصوف):
+    - Ensure adjectives agree with the nouns they describe in gender, number, and case.
+    Example: السيارة الحمراء جميلة (The red car is beautiful).
+  - Ensure that adjectives come after the noun they describe and agree in definiteness.
+    Example: سيارة حمراء (a red car) vs. السيارة الحمراء (the red car).
+
+3.Verb Placement (ترتيب الفعل):
+   - The verb typically precedes the subject in the default VSO (Verb-Subject-Object) word order.
+   Example: كتب الطالب الدرس (The student wrote the lesson).
+  - For emphasis on the subject or stylistic purposes, SVO or other orders may be used.
+   Example: الطالب كتب الدرس (The student wrote the lesson).
+
+4.Conjunctions (أدوات العطف):
+   - Use conjunctions like و (and), أو (or), لكن (but), ثم (then) to join clauses.
+   Example: درستُ اللغة العربية و أحببتها (I studied Arabic and I liked it).
+  - Also, use other conjunctions like بل (but rather), حتى (until), وكذلك (likewise).
+
+5.Use of Proper Connectives (استخدام الروابط المناسبة):
+   - To ensure coherence and fluidity, use appropriate connectives and transition words to link clauses.
+   Example: بعد أن أنهى عمله، ذهب إلى المنزل (After he finished his work, he went home).
+
+6.Avoid Run-on Sentences (تجنب الجمل الطويلة بلا فواصل):
+   - Ensure clarity by not overloading sentences with too many clauses. Use punctuation effectively.
+   Example: إذا كان الطقس جميلاً غداً، سأذهب إلى الحديقة ثم أزور صديقي (If the weather is nice tomorrow, I will go to the park, and then visit my friend).
+
+7.Pronoun Reference (مرجع الضمائر):
+   - Ensure that pronouns clearly refer to the correct nouns to avoid ambiguity.
+   Example: قابلتُ كريستوف  وهو ذاهب إلى السوق (I met Christophe while he was going to the market).
+
+8.Use of Definite and Indefinite Nouns (استخدام الأسماء المعرفة والنكرة):
+   - Ensure correct use of the definite article "ال" (the) and the absence of it for indefinite nouns.
+   Example: الكتاب جيد (The book is good) vs. كتاب جيد (A good book).
+
+9.Negation (النفي):
+    - Learn the proper ways to negate verbs and sentences, using: لا (no/not), لم (did not), لن (will not), and ليس (is not).
+    Example: لا أريد الذهاب (I do not want to go).
+
+10.Emphasis (التوكيد):
+    - Use emphatic articles and structures such as إنّ (indeed), قد (indeed/already), and التوكيد بالنون (emphasis with nunation) to emphasize statements.
+    Example: إنّ الطالبَ مجتهدٌ (Indeed, the student is diligent).
+
+11.Use of the Vocative (النداء):
+    - When addressing someone directly, use the vocative particle يا (O).
+    Example: يا كريستوف، تعال هنا (O Christophe, come here).
+
+12.Word Order Flexibility (مرونة ترتيب الكلمات):
+    - Although VSO is the default order, MSA allows for SVO and other variations for emphasis or style.
+    Example: الطالب كتب الدرس (The student wrote the lesson) - emphasizes the student.
+
+## Note: this is a critical task make sure that your refutation does not turn into NEI or remain Supported. DO NOT ADD INFORMATION THAT CANNOT BE REFUTED BY THE EVIDENCE

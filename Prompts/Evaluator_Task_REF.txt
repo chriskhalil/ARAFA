@@ -1,0 +1,273 @@
+### **Arabic Language and Grammar Analysis Prompt (Refuted / NEI)**
+
+You will receive multiple inputs, each consisting of a claim and its supporting evidence in Arabic, along with coreference entities of both the claim, evidence, and the original document where the claim was retrieved from. For each input, your task is to analyze the claim, evidence, and coreference entities to determine whether the evidence **refutes** the claim or if there is **Not Enough Information (NEI)** to make a determination. Pay special attention to the level of assertion and ensure that your analysis is thorough and accurate. Each input is independent, and information from one claim-evidence pair should not carry over to others. Follow these steps for each input:
+
+---
+
+## Input Structure
+You will receive multiple inputs in the following format:
+```
+{
+  "id": "Unique identifier for the evaluation process",
+  "evidence": "opposing information",
+  "Entity in Claim": "Primary subject/object in the claim",
+  "Entity Coreferenced to in Evidence:": "How the entity is referenced in the evidence",
+  "Entity Coreferenced to in Text": "Original appearance of the entity in its source and main context",
+  "claim": "Statement or assertion to evaluate"
+}
+```
+## **CRITICAL ANALYSIS**
+
+For each input:
+1. **Coreference Resolution and Evidence-Only Verification:**
+   - Analyze the coreference resolution provided in the input fields `entity_in_claim`, `entity_in_evidence`, and `entity_in_original`.
+   - Ensure that the entity referenced in the claim is correctly and unambiguously identified in the evidence using the coreference information.
+   - List all facts and relationships explicitly stated in the evidence.
+   - Check each element of the claim against only the listed facts from the evidence and the coreference resolution.
+   - If the coreference resolution is unclear or fails to establish a strong link between the claim and evidence entities, or if any claim element lacks explicit support or contradiction in either the evidence facts or the coreference resolution, the claim is **NEI**.
+   - Provide a concise reasoning for how the coreference resolution and evidence **refute** or do not refute the claim.
+   - If the claim contains **adjectives, adverbs, or possessive phrases** (e.g., الملكية, الخاصة, الحكومية) that modify entities, these **must explicitly appear in the evidence** or be derivable through grammatical agreement. If absent, classify as **NEI**.
+   - Distinguish between **strength of assertion** in verbs:
+     - Explicit affirmation verbs (أكد، أعلن، برهن) ≠ weaker verbs (اهتم، ناقش، فكّر)
+     - Conditional/hypothetical structures (لو، ربما) ≠ categorical statements
+     - Mismatches in assertion strength reduce Semantic Similarity to 0.
+
+## CRITICAL COREFERENCE RULES ##
+
+1. **Entity Validation Through Coreference:**
+   - The coreference fields (Entity_in_Claim, Co_referenced_in_Evidence, Co_referenced_in_Text) serve as VALID REFUTING EVIDENCE
+   - If an entity is established through coreference fields, it should be treated as if it were explicitly mentioned in the evidence
+   - Coreference information has EQUAL WEIGHT to the evidence text for entity verification
+   - The presence of an entity in the coreference fields FULLY VALIDATES that entity's usage in contradiction
+
+2. **Integration of Coreference Information:**
+   - When analyzing entity references, COMBINE:
+     * Direct mentions in the evidence
+     * Information from all coreference fields
+   - This combined information forms the complete evidence base for entity verification
+
+3. **Entity Validation Process:**
+   1. Check direct mentions in evidence
+   2. Check all coreference fields
+   3. If entity is validated through EITHER source, consider it for contradiction assessment
+   4. Only mark as NEI if entity is missing from BOTH evidence AND coreference fields
+
+4. **Example Application:**
+   For claim "احمد كتب..." with evidence "لم يكتب..." where احمد appears in coreference:
+   - Even though احمد isn't in evidence directly
+   - But appears in coreference fields
+   - This is REFUTED, not NEI
+
+
+2. **Grammar Analysis:**
+   - Identify and describe key grammatical structures used in the claim and evidence, focusing on those that impact assertion level, such as:
+     - Verb forms, tenses, and modality
+     - Subordinate clauses, conditional structures, and relative clauses
+     - Pronoun reference, agreement, and ambiguity
+     - Prepositions, conjunctions, and particles
+     - Negative and emphatic structures
+   - Analyze any differences in grammatical structures between claim and evidence.
+   - Consider the implications of grammatical choices on the level of assertion and overall meaning.
+   - Flag discrepancies between:
+     - Direct vs. indirect speech (قال vs. أشار إلى)
+     - Active vs. passive voice
+     - Perfective (الماضي) vs. imperfective (المضارع) tenses
+   - Deduct 30% of the Grammar Score for mismatched assertion modalities (e.g., "كان مهتمًا" vs. "أكد").
+   - Assign a Grammar Score from 0 to 96 reflecting the grammatical alignment between claim and evidence.
+
+3. **Vocabulary & Semantics:**
+   - Examine key words and phrases in the claim, evidence, and coreference resolution fields.
+   - Identify terms that indicate certainty, hedging, or qualification.
+   - Analyze synonyms, near-synonyms, antonyms, and potentially ambiguous terms.
+   - Consider dialectal variations, idioms, metaphorical language, and figurative speech.
+   - Examine negation, quantifiers, collective nouns, and gendered language.
+   - Validate pronoun references and potentially ambiguous terms using the coreference resolution.
+   - Identify any terms or references that require cultural, historical, or situational context not provided in the evidence.
+   - Flag any unsupported inferences or assumptions required to link claim and evidence vocabularies.
+   - **Exact qualifier matching**:
+     - Terms like الملكية/الوطنية/الرسمية in claims **must have identical counterparts** in evidence.
+     - Near-synonyms (e.g., "ضرورة" vs. "أهمية") are only acceptable if they appear in the same grammatical role.
+     - Deduct 50% of Vocabulary Score for missing qualifiers.
+   - Assign a Vocabulary Score from 0 to 96 based on the alignment of meaning between claim and evidence.
+
+4. **Semantic Similarity:**
+   - Evaluate whether the evidence expresses a meaning that **directly contradicts** the claim or if there is **Not Enough Information (NEI)** to determine refutation.
+   - Identify any gaps or shifts in focus, subject, predicate, or certainty.
+   - Analyze the implications of the coreference resolution on the semantic alignment.
+   - Examine the logical relationships between claim elements and evidence statements.
+   - Consider the scope, temporality, and modality of the claim and evidence.
+   - Justify your stance with specific examples from the claim, evidence, and coreference resolution.
+   - If the claim adds **descriptors not explicitly in the evidence**, set Semantic Similarity Score to 0. This includes:
+     - Geographic locations
+     - Institutional affiliations
+     - Temporal markers
+   - Assign a Semantic Similarity Score from 0 to 96 reflecting the degree to which the evidence and coreference resolution **refute** the claim in meaning and assertion.
+   - A score of 0 indicates the evidence is insufficient to refute the claim and results in **NEI**.
+
+5. **Global Entity Ambiguity Rule**
+   - When entities can be applied globally without specific localization, classify as NEI. This includes:
+     
+     a) **Government Institutions Without Jurisdiction:**
+        - Generic terms like "الحكومة", "البرلمان", "المجلس النيابي" without country specification
+        - Administrative bodies like "وزارة التعليم", "وزارة الصحة" without national context
+        - Regulatory agencies without jurisdictional scope
+     
+     b) **International Organizations Without Time/Branch:**
+        - Generic references to "الأمم المتحدة", "منظمة الصحة العالمية" without:
+          * Specific time period
+          * Specific branch/division
+          * Specific initiative/program
+     
+     c) **Economic Entities Without Market Context:**
+        - Generic terms like "السوق", "البورصة", "سعر الفائدة" without:
+          * Specific country/region
+          * Specific timeframe
+          * Specific market segment
+     
+     d) **Cultural/Social Institutions:**
+        - Generic references to "المجتمع", "الثقافة", "العادات" without:
+          * Geographic specification
+          * Cultural context
+          * Historical period
+     
+     e) **Educational/Scientific Entities:**
+        - Generic terms like "الجامعة", "المعهد", "المختبر" without:
+          * Institutional affiliation
+          * Geographic location
+          * Specific department/faculty
+
+   - Implementation Rules:
+     1. ANY mention of these entities WITHOUT proper localization triggers automatic NEI
+     2. Localization must appear in BOTH claim and evidence
+     3. Localization must be EXACT MATCH between claim and evidence
+     4. Previous or assumed context from other claims/evidence CANNOT be used for localization
+     5. The requirement for localization CANNOT be satisfied through coreference resolution alone
+     - A score of 0 signifies that the main entity lacks sufficient information for localization and generalization, leading to an NEI judgment.
+
+
+6. **Reasoning:**
+   - Provide a concise explanation (3-5 sentences) of how the evidence **refutes** or does not refute the claim based on the coreference resolution, evidence-only verification, grammar, vocabulary, and semantic analyses.
+   - Highlight the key points from your analysis that most impact your final judgement.
+   - Avoid redundancy with the individual analysis explanations.
+
+7. **Final Score Calculation:**
+   - Final Score = (0.3 * Grammar Score) + (0.3 * Vocabulary Score) + (0.4 * Semantic Similarity Score)
+   - If **any** of these occur:
+     - Missing critical descriptor (per Semantic Similarity rules)
+     - Mismatched assertion modality (per Grammar Analysis)
+     Then Final Score = max(Final Score, 70)
+
+8. **Judgement:**
+
+A claim is **REFUTED** when there is complete, unambiguous contradiction between the claim and evidence with no missing information or assumptions required. The following conditions must ALL be met:
+- Final Score is 88 or above.
+
+1. **Complete Information Contradiction**
+   - Complete information contradiction between claim and evidence + coreferences.
+   - **All critical details mentioned in the claim must be explicitly contradicted in the evidence.**
+   - No external knowledge or assumptions should be required to establish the contradiction; you can only use the coreference resolution fields `entity_in_evidence`, `entity_in_claim`, and `entity_in_original`.
+
+2. **Entity Reference Clarity**
+   - Clear and consistent entity references across claim, evidence, and coreference.
+   - All entities mentioned in the claim must be clearly and unambiguously identified in the evidence or its corresponding `entity_in_evidence` field.
+
+3. **Contextual Boundaries**
+   - The scope of the claim must be explicitly defined and contradicted in the evidence.
+   - Time periods must be clearly specified and misaligned.
+   - Geographic or jurisdictional boundaries must be explicit and mismatched.
+   - Organizational hierarchies or structures must be clearly defined when relevant.
+
+4. **Logical Relationship Contradiction**
+   - Cause-effect relationships must be explicitly contradicted.
+   - Sequential events must have clear misalignment.
+   - Conditional statements must have all conditions contradicted.
+   - Correlations or connections must be directly negated.
+
+---
+
+## **NEI (Not Enough Information)**
+
+A claim is classified as **NEI** when there are gaps, ambiguities, or missing elements that prevent complete verification of refutation. Any ONE of the following conditions triggers an NEI classification:
+
+1. **Entity Ambiguity**
+   - When references could apply to multiple entities.
+   - When the specific identity is unclear.
+   - When pronouns have multiple possible antecedents.
+   - When entity relationships are not fully specified.
+
+2. **Scope Uncertainty**
+   - When boundaries of application are not clear.
+   - When universal claims lack universal evidence.
+   - When temporal bounds are not specified.
+   - When geographic or jurisdictional scope is unclear.
+
+3. **Generic Reference Issue**
+   - When broad terms are used without specific identification.
+   - When collective nouns lack clear definition.
+   - When institutional references lack specific designation.
+   - When general terms require specification for clarity.
+   - **Specifically for Arabic:**
+     - When general terms like "الحكومة", "الشعب", "الإعلام", "مؤسسة", "شركة" are used without specific identification.
+     - These terms MUST be classified as NEI unless they are explicitly qualified with:
+       * Specific country/jurisdiction (e.g., "الحكومة المصرية")
+       * Specific department/branch plus the country jurisdiction (e.g., "وزارة التعليم المصرية")
+     - The qualification must appear in BOTH claim and evidence.
+
+4. **Missing Context or Details**
+   - **Critical Information Gaps:**
+     - When the claim includes details or events not mentioned in the evidence.
+     - Examples include specific causes, sources, reports, or actions absent in the evidence.
+   - **Background Information Needed:**
+     - When relationships between elements are unclear.
+     - When situational context is assumed but not stated.
+     - When cultural or historical context is required but absent.
+   - Missing descriptors that **narrow meaning**:
+     - Royal/National/Regional modifiers
+     - Institutional names (e.g., "وزارة التعليم" vs. "الحكومة")
+     - Specific locations/dates not in evidence.
+
+5. **Temporal Ambiguity**
+   - When time periods are not specified.
+   - When sequence of events is unclear.
+   - When duration is not defined.
+   - When frequency or repetition patterns are ambiguous.
+
+6. **Generalization Issues**
+   - When specific instances are used to support general claims.
+   - When partial evidence is used to support complete claims.
+   - When sample size is insufficient for the claim's scope.
+   - When extrapolation would be required.
+
+7. **Logical Gap Presence**
+   - When assumptions are required to connect evidence to claim.
+   - When intermediate steps are missing.
+   - When cause-effect relationships are implied but not stated.
+   - When correlations are assumed without evidence.
+   - Assumptions about **unstated modifiers** (e.g., inferring "الملكية" from context) constitute logical gaps.
+
+8. **Precision Requirements**
+   - When quantitative claims lack precise measurements.
+   - When qualitative claims lack clear standards.
+   - When comparative claims lack clear basis for comparison.
+   - When evaluative claims lack defined criteria.
+
+---
+
+### **Output Structure**
+For all inputs, provide the output in the following format ONLY:
+```json
+{
+  "ID": "input ID",
+  "Reasoning": "The deep Reasoning you did 3 to 5 lines. Extra detail is not required.  Reasoning in English, ONLY the Technical Terms in ARABIC",
+  "Analysis_Score": [Grammar_Score, Vocabulary_Score, Semantic_Similarity_Score, Final_Score],
+  "Judgement": "Refuted | NEI"
+}
+```
+
+
+**CRITICAL:**
+- Do not deviate from this output format.
+- DO NOT include any additional text or change any character case.
+- Ensure the output is a proper JSON-like object.
+- Process all the input tuples and give an output for each. Do not leave any input without an output.
+
